@@ -1,0 +1,14 @@
+# CMSSW build / local artifacts (should never live inside a package)
+*.pyc
+__pycache__/
+*.so
+*.d
+*.o
+tmp/
+# editor / OS noise
+.DS_Store
+*~
+.*.swp
+# local cmsRun outputs
+HiForestMiniAOD.root
+*.root.tmp
