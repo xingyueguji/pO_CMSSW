@@ -42,6 +42,8 @@ Output: `HiForestMiniAOD.root` (written via `TFileService`).
 |---|---|---|
 | `Configuration/test/forest_miniAOD_run3_pO_DATA.py` | data | `150X_dataRun3_Prompt_v3` |
 | `Configuration/test/forest_miniAOD_run3_pO_MC.py`   | MC   | `150X_mcRun3_2025_forpO_realistic_v9` |
+| `Configuration/test/forest_miniAOD_run3_pPb_DATA.py` | data (pPb, W→µν) | placeholder — see *pPb adaptation* below |
+| `Configuration/test/forest_miniAOD_run3_pPb_MC.py`   | MC (pPb, W→µν)   | placeholder — see *pPb adaptation* below |
 
 Common to both:
 
@@ -80,6 +82,47 @@ Common to both:
   ```
   The MC config has **no** such lepton filter (keeps all events). Add the same
   block to the MC config if you want a matched pre-selection.
+
+---
+
+## pPb adaptation (W → µν), branch `pPb_WToMuNu`
+
+`forest_miniAOD_run3_pPb_{DATA,MC}.py` are copies of the pO configs with the
+species-dependent items isolated and marked `TODO(pPb)` in the file headers.
+Before submitting to CRAB, set:
+
+1. **Era** — `CMSSW_15_0_X` has **no pPb era** (only `Run3_2025_OXY`,
+   `Run3_2025_NEON`, `Run3_pp_on_PbPb_2025`, UPC variants). The pPb configs
+   default to the generic `Run3_2025` (pPb is reconstructed pp-style);
+   replace it with the official era of whatever release the pPb prompt reco
+   uses — that release, not 15_0_14, should be the base for the production.
+2. **Global tags** — data: prompt GT of the pPb period; MC: pPb-campaign
+   realistic GT. Current values are pO placeholders.
+3. **Input datasets** — data: the pPb muon PD (2016 pPb: `PASingleMuon`;
+   a new run may use `IonPhysics*`-style streams). MC: a `WToMuNu` pPb
+   sample with the correct beam boost and nPDFs.
+4. **Trigger list** (`hltobject.triggerNames`) — placeholders are the 2016
+   pPb 8.16 TeV reference paths (`HLT_PAL3Mu12_v` was the W→µν trigger).
+   Replace with the actual pPb menu names; the `HLT_Oxy*` paths of the pO
+   configs do not exist in a pPb menu.
+5. **Centrality input** — `hiMuons`/`hiElectrons` iso BDTs consume
+   `centralityBin:HFtowers` (fed from `hiCentrality`). Confirm `hiCentrality`
+   exists in the pPb miniAOD (2016 pPb used `pACentrality`); otherwise the
+   centrality source must be changed.
+6. **Lepton BDTs** — still the `Run3_2024_PbPb` trainings (same re-use the pO
+   setup made). `HIMuonMVAProducer` throws for any other `era` string, so a
+   pPb retraining also needs a code hook. Validate on pPb before trusting iso.
+7. **Beam direction** — pPb runs have p→Pb and Pb→p periods. Lab-frame
+   quantities are stored, so nothing changes in the forest, but keep the two
+   periods in separate productions; the CM rapidity shift (~0.465 at 8.16 TeV)
+   and eta flip are applied at analysis level.
+
+**MET caveat:** no MET collection is stored by this forest. For W mT, either
+rebuild PF MET offline from the PF-candidate tree (stored with `ptMin = 0`,
+`|eta| < 5` for exactly this purpose) or add a small `slimmedMETs` analyzer.
+
+The W pre-selection (`superFilterPath`: ≥1 lepton with pT ≥ 15, loose ID) is
+kept identical to the pO data config; MC remains unfiltered.
 
 ---
 
