@@ -5,9 +5,7 @@
 #
 # Adapted from forest_miniAOD_run3_pO_MC.py (pO 2025).
 # See the TODO(pPb) notes in forest_miniAOD_run3_pPb_DATA.py — the same
-# run-dependent items apply here:
-#   Era, MC global tag, input file (W->munu pPb signal, produced with the
-#   correct CM boost / beam direction and an nPDF set), trigger list.
+# run-dependent items apply here.
 
 import FWCore.ParameterSet.Config as cms
 # TODO(pPb): replace with the official pPb era of the production release

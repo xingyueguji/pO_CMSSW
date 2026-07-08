@@ -2,26 +2,7 @@
 # Input: miniAOD
 # Type: data
 # Target: pPb, W -> mu nu (muon channel)
-#
-# Adapted from forest_miniAOD_run3_pO_DATA.py (pO 2025).
-# Everything marked "TODO(pPb)" is run-dependent and MUST be set to the
-# values of the actual pPb production before submission:
-#   1. Era        - 15_0_X has no pPb-specific era; using generic Run3_2025
-#                   (pPb is reconstructed pp-style). Replace with the official
-#                   era of the pPb prompt-reco release (check the pPb workflow
-#                   in Configuration/Eras of that release).
-#   2. Global tag - use the prompt GT of the pPb data-taking period.
-#   3. Input file - point to the pPb muon primary dataset
-#                   (2016 pPb: /PASingleMuon/PARun2016C-.../MINIAOD;
-#                    naming for a new run will differ, e.g. IonPhysics* style).
-#   4. Trigger list - replace with the single-muon paths of the pPb HLT menu.
-#                   2016 pPb W->munu used HLT_PAL3Mu12_v. The 2025 pO run used
-#                   HLT_OxyL1SingleMu* naming; a new pPb menu will have its own
-#                   prefix. Verify against the actual menu before running.
-#   5. Beam direction - pPb runs come in two configurations (p->Pb and Pb->p).
-#                   Nothing here depends on it (lab-frame quantities are stored)
-#                   but keep the two periods in separate CRAB tasks so the
-#                   eta flip / CM boost (y_shift ~ 0.465) can be applied offline.
+
 
 import FWCore.ParameterSet.Config as cms
 # TODO(pPb): replace with the official pPb era of the production release
@@ -98,10 +79,7 @@ process.load('HeavyIonsAnalysis.EventAnalysis.l1object_cfi')
 process.metFilters = process.skimanalysis.clone(hltresults = "TriggerResults::RECO")
 process.hiEvtAnalyzer.doHFfilters = False
 
-# TODO(pPb): replace with the single-muon + minimum-bias paths of the actual
-# pPb HLT menu. The names below are the 2016 pPb (8.16 TeV) reference paths;
-# a new pPb menu will have different names (verify with `hltInfo` on one file
-# or check the menu in ConfDB before submitting).
+# TODO(pPb): replace with actual trigger needed
 process.hltobject.triggerNames = cms.vstring(
     'HLT_PAL3Mu12_v',
     'HLT_PAL3Mu15_v',
