@@ -32,7 +32,7 @@ DATASET  = '/IonPhysics0/OORun2025-PromptReco-v1/MINIAOD'
 LUMIMASK = ('https://cms-service-dqmdc.web.cern.ch/CAF/certification/'
             'Collisions25OO/Cert_Collisions2025OO_394153_394217_golden.json')
 STORAGE  = 'T3_CH_CERNBOX'
-TAG      = 'HiForestMiniAOD_OO2025_WZ_v1'
+TAG      = 'HiForestMiniAOD_OO2025_WZ_v2'
 
 config = config()
 
@@ -43,7 +43,12 @@ config.General.transferLogs = False
 
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'forest_miniAOD_run3_OO_DATA.py'
-config.JobType.maxMemoryMB = 1000
+# CRAB caps 1-core jobs at 3000 MB and the forest peaks above that (it
+# loads ~150 MB of BDT/ONNX models on top of event processing) — the v1
+# probe jobs were memory-killed. Request 2 cores to unlock a 5000 MB
+# ceiling; CMSSW 15_0 forest modules are thread-safe, so both cores work.
+config.JobType.numCores = 2
+config.JobType.maxMemoryMB = 5000
 config.JobType.allowUndistributedCMSSW = True
 
 config.Data.inputDataset = DATASET
