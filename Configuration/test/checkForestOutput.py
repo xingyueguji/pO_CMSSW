@@ -12,15 +12,22 @@ import sys
 
 import ROOT
 
-# note: muonAnalyzer/MuonTree is intentionally absent — muonAnalyzer is
-# loaded but not scheduled on any path (as in the original pO configs);
-# muons are stored in ggHiNtuplizer/EventTree via hiMuons
+# Expected structure, cross-checked against the pO production output
+# (pO_2025.root). Intentionally absent vs a naive reading of the config:
+# muonAnalyzer/MuonTree (loaded, never scheduled — muons are in
+# ggHiNtuplizer/EventTree via hiMuons), jet trees (only the rho analyzer is
+# scheduled), track trees (unpackedTracksAndVertices is a producer only).
+# metFilters/HltTree can have far fewer entries than the event trees (also
+# true in the pO reference file).
 TREES = [
     'HiForestInfo/HiForest',
     'hiEvtAnalyzer/HiTree',
     'hltanalysis/HltTree',
+    'l1object/L1UpgradeFlatTree',
     'skimanalysis/HltTree',
+    'metFilters/HltTree',
     'particleFlowAnalyser/pftree',
+    'hiFJRhoAnalyzerFinerBins/t',
     'ggHiNtuplizer/EventTree',
 ]
 
@@ -59,6 +66,11 @@ def main():
         tag = ('in golden-JSON range' if 394153 <= run <= 394217 else
                'OUTSIDE golden range — OK for a smoke test, excluded in production')
         print('=== first stored run: %d — %s ===' % (run, tag))
+
+    print('=== hltobject trees (one per configured path) ===')
+    for pre in TRIG_PREFIXES:
+        t = f.Get('hltobject/' + pre)
+        print('  hltobject/%-33s %s' % (pre, 'MISSING' if not t else '%d entries' % t.GetEntries()))
 
     hlt = f.Get('hltanalysis/HltTree')
     if hlt:
