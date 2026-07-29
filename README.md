@@ -71,10 +71,14 @@ Output: `HiForestMiniAOD.root` (written via `TFileService`).
 
 - **Era:** `Run3_2025_OXY` — the oxygen-run era of 2025 covers OO as well as
   pO. (NeNe will need `Run3_2025_NEON`.)
-- **HLT paths stored** (`hltobject.triggerNames`) — same Oxy menu:
-  `HLT_OxyL1SingleMu0_v`, `HLT_OxyL1SingleMuOpen_v`,
-  `HLT_OxyL1SingleEG10_v`, `HLT_OxyL1SingleEG15_v`,
-  `HLT_MinimumBiasHF_OR_BptxAND_v`
+- **HLT paths stored** (`hltobject.triggerNames`) — the five pO paths
+  (`HLT_OxyL1SingleMu0_v`, `HLT_OxyL1SingleMuOpen_v`, `HLT_OxyL1SingleEG10_v`,
+  `HLT_OxyL1SingleEG15_v`, `HLT_MinimumBiasHF_OR_BptxAND_v`) **plus** the
+  W/Z-relevant additions verified to exist in the OO menu (run 394153):
+  `HLT_OxyL1SingleMu3/5/7_v`, `HLT_OxyL1DoubleMu0_v`,
+  `HLT_OxyL1DoubleMuOpen_v` (Z→µµ), `HLT_OxyL1SingleEG21_v`.
+  This only adds trigger-*object* trees; trigger *bits* of all paths are
+  stored by `hltanalysis` regardless.
 - **Lepton ID/iso models** (reused from Run3 2024 PbPb training, shipped in
   this package): electron ID/iso `EGMAnalysis/data/Run3_2024_PbPb/{eleid_BDT.ubj,eleiso_BDT.ubj}`,
   muon iso `MuonAnalysis/data/Run3_2024_PbPb/muiso_BDT.ubj`, lepton-spectra

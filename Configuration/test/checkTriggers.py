@@ -17,8 +17,14 @@ from DataFormats.FWLite import Events, Handle
 WANTED = [
     'HLT_OxyL1SingleMu0_v',
     'HLT_OxyL1SingleMuOpen_v',
+    'HLT_OxyL1SingleMu3_v',
+    'HLT_OxyL1SingleMu5_v',
+    'HLT_OxyL1SingleMu7_v',
+    'HLT_OxyL1DoubleMu0_v',
+    'HLT_OxyL1DoubleMuOpen_v',
     'HLT_OxyL1SingleEG10_v',
     'HLT_OxyL1SingleEG15_v',
+    'HLT_OxyL1SingleEG21_v',
     'HLT_MinimumBiasHF_OR_BptxAND_v',
 ]
 

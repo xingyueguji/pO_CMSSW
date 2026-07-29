@@ -82,13 +82,20 @@ process.load('HeavyIonsAnalysis.EventAnalysis.l1object_cfi')
 process.metFilters = process.skimanalysis.clone(hltresults = "TriggerResults::RECO")
 process.hiEvtAnalyzer.doHFfilters = False
 
-# Same Oxy HLT menu as the pO run; verify against the menu actually used in
-# the OO MC campaign.
+# All names verified against the OO data menu in run 394153; still confirm
+# the OO MC campaign runs the same menu. First five = the pO list; Mu3/5/7,
+# DoubleMu*, EG21 are W/Z additions.
 process.hltobject.triggerNames = cms.vstring(
     'HLT_OxyL1SingleMu0_v',
     'HLT_OxyL1SingleMuOpen_v',
+    'HLT_OxyL1SingleMu3_v',
+    'HLT_OxyL1SingleMu5_v',
+    'HLT_OxyL1SingleMu7_v',
+    'HLT_OxyL1DoubleMu0_v',
+    'HLT_OxyL1DoubleMuOpen_v',
     'HLT_OxyL1SingleEG10_v',
     'HLT_OxyL1SingleEG15_v',
+    'HLT_OxyL1SingleEG21_v',
     'HLT_MinimumBiasHF_OR_BptxAND_v'
 )
 

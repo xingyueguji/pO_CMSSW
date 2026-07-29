@@ -81,13 +81,20 @@ process.load('HeavyIonsAnalysis.EventAnalysis.l1object_cfi')
 process.metFilters = process.skimanalysis.clone(hltresults = "TriggerResults::RECO")
 process.hiEvtAnalyzer.doHFfilters = False
 
-# Same Oxy HLT menu as the pO run; verify the exact version suffixes on an OO
-# file with e.g. hltInfo <file.root> before large-scale submission.
+# All names verified against the OO menu in run 394153 (each present as _v1).
+# First five = the pO list; Mu3/5/7, DoubleMu*, EG21 are W/Z additions
+# (DoubleMu* for Z->mumu; higher single-lepton thresholds for W).
 process.hltobject.triggerNames = cms.vstring(
     'HLT_OxyL1SingleMu0_v',
     'HLT_OxyL1SingleMuOpen_v',
+    'HLT_OxyL1SingleMu3_v',
+    'HLT_OxyL1SingleMu5_v',
+    'HLT_OxyL1SingleMu7_v',
+    'HLT_OxyL1DoubleMu0_v',
+    'HLT_OxyL1DoubleMuOpen_v',
     'HLT_OxyL1SingleEG10_v',
     'HLT_OxyL1SingleEG15_v',
+    'HLT_OxyL1SingleEG21_v',
     'HLT_MinimumBiasHF_OR_BptxAND_v'
 )
 
