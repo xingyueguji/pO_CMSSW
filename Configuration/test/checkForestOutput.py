@@ -77,7 +77,7 @@ def main():
         print('=== trigger bits (accepted / stored events) ===')
         branches = [b.GetName() for b in hlt.GetListOfBranches()]
         for pre in TRIG_PREFIXES:
-            hits = [b for b in branches if b.startswith(pre) and not b.endswith('Prescl')]
+            hits = [b for b in branches if b.startswith(pre) and 'Prescale' not in b]
             if not hits:
                 print('  %-35s no branch found' % pre)
             for b in hits:
@@ -97,8 +97,20 @@ def main():
             if n > 0:
                 mean = sum(gg.GetV1()[i] for i in range(n)) / n
                 print('  %s: n=%d  mean=%.4f  (expect %s)' % (region, n, mean, expect))
+                continue
+            # low-pT fallback: only meaningful for the local test wrapper,
+            # which lowers correctedElectrons.minPt to 5. Qualitative check:
+            # at low pT the E-p combination dilutes the pure ECAL scale, so
+            # expect a ratio between 1 and the nominal scale; != 1 proves
+            # the .dat numbers are applied.
+            n = gg.Draw('elePt/eleRawPt', 'eleRawPt>5 && eleRawPt<20 && ' + cut, 'goff')
+            if n > 0:
+                mean = sum(gg.GetV1()[i] for i in range(n)) / n
+                print('  %s: no electrons with rawPt>20; low-pT fallback (5-20): '
+                      'n=%d  mean=%.4f  (qualitative — expect between 1 and %s)'
+                      % (region, n, mean, expect))
             else:
-                print('  %s: no electrons with rawPt>20 — raise maxEvents in the test config' % region)
+                print('  %s: no electrons above 5 GeV either — raise maxEvents' % region)
 
 
 if __name__ == '__main__':

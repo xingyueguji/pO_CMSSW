@@ -18,5 +18,12 @@ process.maxEvents.input = 10000
 # W/Z pre-selection.
 process.oneLepton.minNumber = cms.uint32(0)
 
+# Electrons above 20 GeV are too rare in a short unselected run to exercise
+# the pT calibration numerically, and the corrector skips electrons below its
+# minPt (20 GeV, the production default). Lower it here so the plentiful soft
+# electrons get corrected and checkForestOutput's low-pT fallback can verify
+# the .dat numbers flow through. Local test only — production keeps 20.
+process.correctedElectrons.minPt = 5.0
+
 # uncomment to test on a locally copied file instead of the one in the config:
 # process.source.fileNames = cms.untracked.vstring('file:/tmp/OO_test.root')
