@@ -25,6 +25,10 @@ def submit(stream):
     dataset = '/IonPhysics%d/%s/MINIAOD' % (stream, RECO_TAG)
     cfg.Data.inputDataset = dataset
     cfg.General.requestName = base.TAG + '_' + dataset.split('/')[1]
+    workdir = os.path.join(cfg.General.workArea, 'crab_' + cfg.General.requestName)
+    if os.path.isdir(workdir):
+        print('>>> skipping %s: %s already exists' % (dataset, workdir))
+        return
     print('>>> submitting', dataset)
     crabCommand('submit', config=cfg)
 

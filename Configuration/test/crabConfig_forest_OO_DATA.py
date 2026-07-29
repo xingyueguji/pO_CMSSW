@@ -43,10 +43,11 @@ config.General.transferLogs = False
 
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'forest_miniAOD_run3_OO_DATA.py'
-# CRAB caps 1-core jobs at 3000 MB and the forest peaks above that (it
-# loads ~150 MB of BDT/ONNX models on top of event processing) — the v1
-# probe jobs were memory-killed. Request 2 cores to unlock a 5000 MB
-# ceiling; CMSSW 15_0 forest modules are thread-safe, so both cores work.
+# Memory: measured on the IonPhysics0 (v2) task — probes at 1000 MB were
+# killed with RSS ~2.2 GB; at the single-core maximum of 3000 MB the probe
+# stage passed and 12/13 main jobs finished (one transient 8901, recovered
+# by the automatic-splitting tail jobs). If streams start failing with
+# exit 50660 (memory), switch to numCores = 2 with maxMemoryMB = 5000.
 config.JobType.numCores = 1
 config.JobType.maxMemoryMB = 3000
 config.JobType.allowUndistributedCMSSW = True
