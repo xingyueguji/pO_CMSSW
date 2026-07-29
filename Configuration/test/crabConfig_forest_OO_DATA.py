@@ -43,7 +43,7 @@ config.General.transferLogs = False
 
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'forest_miniAOD_run3_OO_DATA.py'
-config.JobType.maxMemoryMB = 4000
+config.JobType.maxMemoryMB = 1000
 config.JobType.allowUndistributedCMSSW = True
 
 config.Data.inputDataset = DATASET
