@@ -12,13 +12,15 @@ import sys
 
 import ROOT
 
+# note: muonAnalyzer/MuonTree is intentionally absent — muonAnalyzer is
+# loaded but not scheduled on any path (as in the original pO configs);
+# muons are stored in ggHiNtuplizer/EventTree via hiMuons
 TREES = [
     'HiForestInfo/HiForest',
     'hiEvtAnalyzer/HiTree',
     'hltanalysis/HltTree',
     'skimanalysis/HltTree',
     'particleFlowAnalyser/pftree',
-    'muonAnalyzer/MuonTree',
     'ggHiNtuplizer/EventTree',
 ]
 
@@ -71,6 +73,10 @@ def main():
                 print('  %-35s %d / %d' % (b, n, hlt.GetEntries()))
 
     gg = f.Get('ggHiNtuplizer/EventTree')
+    if gg and gg.GetEntries():
+        print('=== lepton content (ggHiNtuplizer) ===')
+        print('  events with >=1 electron: %d / %d' % (gg.Draw('nEle', 'nEle>=1', 'goff'), gg.GetEntries()))
+        print('  events with >=1 muon:     %d / %d' % (gg.Draw('nMu', 'nMu>=1', 'goff'), gg.GetEntries()))
     if gg:
         print('=== electron pT calibration (corrected/raw, rawPt>20) ===')
         for region, cut, expect in [('EB', 'abs(eleSCEta)<1.4442', '~1.021 data / ~0.997 MC'),

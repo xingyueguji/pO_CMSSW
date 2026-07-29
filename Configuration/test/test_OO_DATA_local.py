@@ -9,9 +9,14 @@ import FWCore.ParameterSet.Config as cms
 
 from forest_miniAOD_run3_OO_DATA import process
 
-# enough events that a few pass the >=1 lepton superfilter and populate the
-# electron calibration check; raise if checkForestOutput reports no electrons
 process.maxEvents.input = 10000
+
+# A >=15 GeV lepton is rare enough that 10k events can yield zero stored
+# events. For the smoke test, drop the lepton-count requirement (vertex and
+# cluster-compatibility filters stay active) so the trees fill; the CRAB
+# production uses forest_miniAOD_run3_OO_DATA.py directly and keeps the full
+# W/Z pre-selection.
+process.oneLepton.minNumber = cms.uint32(0)
 
 # uncomment to test on a locally copied file instead of the one in the config:
 # process.source.fileNames = cms.untracked.vstring('file:/tmp/OO_test.root')
