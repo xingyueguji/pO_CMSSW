@@ -27,7 +27,10 @@ def main():
     if len(sys.argv) != 2:
         sys.exit(__doc__)
 
+    print('opening %s\n  (a remote open takes O(1 min); a silent hang beyond that '
+          'usually means no valid voms proxy)' % sys.argv[1], flush=True)
     events = Events(sys.argv[1])
+    print('file open, reading first event...', flush=True)
     handle = Handle('edm::TriggerResults')
     paths = None
     for ev in events:
