@@ -20,13 +20,14 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 150X, data, OO")
 ###############################################################################
 
 # input files
-# TODO(OO): put a real OO file here for local tests, e.g. from
-#   dasgoclient -query="file dataset=/IonPhysics0/OORun2025-PromptReco-v1/MINIAOD" | head
-# (CRAB overrides this with the input dataset.)
+# Example OO file for local tests (CRAB overrides this with the input
+# dataset). NOTE: run 394075 is below the golden-JSON range 394153-394217 —
+# for menu/trigger checks prefer a file from a certified run:
+#   dasgoclient -query="file dataset=/IonPhysics0/OORun2025-PromptReco-v1/MINIAOD run=<golden run>" | head
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-        'root://xrootd-cms.infn.it//store/data/OORun2025/IonPhysics0/MINIAOD/PromptReco-v1/CHANGE_ME.root'
+        'root://xrootd-cms.infn.it//store/hidata/OORun2025/IonPhysics0/MINIAOD/PromptReco-v1/000/394/075/00000/71feabe2-ca45-4196-8bcf-11550f715358.root'
     ),
 )
 

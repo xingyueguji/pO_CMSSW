@@ -46,8 +46,11 @@ def main():
     if evt and evt.GetEntries():
         evt.GetEntry(0)
         run = int(evt.run)
-        tag = 'OK' if 394153 <= run <= 394217 else 'NOT an OO run?!'
-        print('=== first stored run: %d (OO: 394153-394217) %s ===' % (run, tag))
+        # the OORun2025 dataset also contains earlier, uncertified runs
+        # (e.g. 394075); CRAB's golden-JSON lumimask drops those
+        tag = ('in golden-JSON range' if 394153 <= run <= 394217 else
+               'OUTSIDE golden range — OK for a smoke test, excluded in production')
+        print('=== first stored run: %d — %s ===' % (run, tag))
 
     hlt = f.Get('hltanalysis/HltTree')
     if hlt:
