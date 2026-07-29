@@ -36,7 +36,8 @@ def main():
     for ev in events:
         ev.getByLabel(('TriggerResults', '', 'HLT'), handle)
         names = ev.object().triggerNames(handle.product())
-        paths = sorted(names.triggerNames())
+        # cppyy returns std::string objects; str() them for join/startswith
+        paths = sorted(str(p) for p in names.triggerNames())
         break
     if paths is None:
         sys.exit('no events in file')
