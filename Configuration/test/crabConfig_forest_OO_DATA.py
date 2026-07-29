@@ -47,8 +47,8 @@ config.JobType.psetName = 'forest_miniAOD_run3_OO_DATA.py'
 # loads ~150 MB of BDT/ONNX models on top of event processing) — the v1
 # probe jobs were memory-killed. Request 2 cores to unlock a 5000 MB
 # ceiling; CMSSW 15_0 forest modules are thread-safe, so both cores work.
-config.JobType.numCores = 2
-config.JobType.maxMemoryMB = 5000
+config.JobType.numCores = 1
+config.JobType.maxMemoryMB = 3000
 config.JobType.allowUndistributedCMSSW = True
 
 config.Data.inputDataset = DATASET
