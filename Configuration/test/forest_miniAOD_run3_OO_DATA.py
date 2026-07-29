@@ -51,10 +51,9 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-# TODO(OO): verify this prompt GT covers the OO runs (it is the one used for
-# the pO production). Cross-check the GT the OO PromptReco actually used:
-#   dasgoclient -query="config dataset=/IonPhysics0/OORun2025-PromptReco-v1/MINIAOD system=dbs3"
-process.GlobalTag = GlobalTag(process.GlobalTag, '150X_dataRun3_Prompt_v3', '')
+# GT of the OO PromptReco, confirmed from the DAS config of
+# /IonPhysics*/OORun2025-PromptReco-v1/MINIAOD (reco release CMSSW_15_0_9_patch3).
+process.GlobalTag = GlobalTag(process.GlobalTag, '150X_dataRun3_Prompt_v1', '')
 process.HiForestInfo.GlobalTagLabel = process.GlobalTag.globaltag
 
 ###############################################################################

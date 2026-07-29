@@ -8,10 +8,15 @@
 # /IonPhysicsN PD. Use multicrab_OO_DATA.py to submit them all in one go;
 # this file alone submits the single PD set in DATASET below.
 #
-# TODO(OO) before submitting — all marked CHANGE_ME below:
-#   1. DATASET   : confirm names/how many IonPhysics streams exist:
-#                    dasgoclient -query="dataset dataset=/IonPhysics*/OORun2025*/MINIAOD"
-#   2. STORAGE   : your T2/T3 storage site and /store/user area
+# TODO(OO) before submitting — marked CHANGE_ME below:
+#   STORAGE : your T2/T3 storage site and /store/user area
+#
+# Input confirmed in DAS: 60 streams, /IonPhysics{0..59}/OORun2025-PromptReco-v1/MINIAOD
+# (PromptReco with CMSSW_15_0_9_patch3, GT 150X_dataRun3_Prompt_v1).
+# There are also PromptReco skims /IonPhysics*/OORun2025-Ion*-PromptReco-v1/USER;
+# if one of them is a lepton skim with miniAOD-format content, it would be a
+# much smaller input for W/Z — check the skim names/content in DAS before
+# considering a switch.
 #
 # LUMIMASK: the OO golden JSON (runs 394153-394217) from
 #   https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions25OO/

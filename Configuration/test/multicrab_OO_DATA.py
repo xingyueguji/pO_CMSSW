@@ -9,16 +9,13 @@
 #   python3 multicrab_OO_DATA.py            # submit all streams
 #   python3 multicrab_OO_DATA.py status     # crab status of all submitted tasks
 #
-# Edit N_STREAMS after checking DAS:
-#   dasgoclient -query="dataset dataset=/IonPhysics*/OORun2025*/MINIAOD"
-
 import os
 import sys
 from multiprocessing import Process
 
 from CRABAPI.RawCommand import crabCommand
 
-N_STREAMS = 8   # TODO(OO): set to the actual number of IonPhysics streams
+N_STREAMS = 60  # IonPhysics0..IonPhysics59, confirmed in DAS
 RECO_TAG = 'OORun2025-PromptReco-v1'
 
 

@@ -45,7 +45,7 @@ Output: `HiForestMiniAOD.root` (written via `TFileService`).
 
 | Config | Type | Global Tag |
 |---|---|---|
-| `Configuration/test/forest_miniAOD_run3_OO_DATA.py` | data (OO) | `150X_dataRun3_Prompt_v3` — verify, see checklist |
+| `Configuration/test/forest_miniAOD_run3_OO_DATA.py` | data (OO) | `150X_dataRun3_Prompt_v1` (OO PromptReco GT, confirmed in DAS) |
 | `Configuration/test/forest_miniAOD_run3_OO_MC.py`   | MC (OO)   | pO campaign GT as placeholder — verify, see checklist |
 | `Configuration/test/forest_miniAOD_run3_pO_DATA.py` | data (pO, original) | `150X_dataRun3_Prompt_v3` |
 | `Configuration/test/forest_miniAOD_run3_pO_MC.py`   | MC (pO, original)   | `150X_mcRun3_2025_forpO_realistic_v9` |
@@ -53,8 +53,10 @@ Output: `HiForestMiniAOD.root` (written via `TFileService`).
 ### What the OO configs change vs pO
 
 1. **Info string** — `..., data, OO` / `..., mc, OO`.
-2. **Input** — OO datasets: `/IonPhysics*/OORun2025-PromptReco-v1/MINIAOD`
-   (data), an OO-campaign `MINIAODSIM` (MC).
+2. **Input** — OO datasets: `/IonPhysics{0..59}/OORun2025-PromptReco-v1/MINIAOD`
+   (data, 60 streams, 9.0 nb⁻¹, runs 394153–394217; PromptReco with
+   `CMSSW_15_0_9_patch3` — files read fine in the `CMSSW_15_0_14` build),
+   an OO-campaign `MINIAODSIM` (MC).
 3. **Electron pT calibration** — `correctedElectrons.correctionFile`:
    - data: `EGMAnalysis/data/Run3_2025_pO/SSpORun2025.dat` (EB/EE scale)
    - MC: `EGMAnalysis/data/Run3_2025_pO/SSpO2025MC.dat` (EB/EE scale + smear)
@@ -117,27 +119,33 @@ python3 multicrab_OO_DATA.py                    # all streams
 python3 multicrab_OO_DATA.py status             # check them
 ```
 
-### Pre-submission checklist (all marked TODO(OO)/CHANGE_ME in the files)
+### Pre-submission checklist
 
-1. **Data GT** — `150X_dataRun3_Prompt_v3` is the pO value; confirm it (or
-   the correct prompt version) covers the OO runs:
-   `dasgoclient -query="config dataset=/IonPhysics0/OORun2025-PromptReco-v1/MINIAOD system=dbs3"`
-2. **MC GT** — set the OO campaign GT (`conddb search mcRun3_2025_forOO`, or
+Already confirmed and set in the configs:
+
+- **Data GT** — `150X_dataRun3_Prompt_v1` (from the DAS config of the OO
+  PromptReco, done with `CMSSW_15_0_9_patch3`).
+- **Datasets** — 60 streams, `/IonPhysics{0..59}/OORun2025-PromptReco-v1/MINIAOD`
+  (`N_STREAMS = 60` in `multicrab_OO_DATA.py`). PromptReco skims
+  `/IonPhysics*/OORun2025-Ion*-PromptReco-v1/USER` also exist — if one is a
+  lepton skim with miniAOD-format content it would be a much smaller W/Z
+  input; check the skim names/content in DAS before considering a switch.
+
+Still to do (marked TODO(OO)/CHANGE_ME in the files):
+
+1. **MC GT** — set the OO campaign GT (`conddb search mcRun3_2025_forOO`, or
    take it from the MC dataset's DAS config). The config currently carries
    the pO GT so it stays runnable for smoke tests.
-3. **Datasets** — confirm the exact PD names and how many IonPhysics streams
-   exist: `dasgoclient -query="dataset dataset=/IonPhysics*/OORun2025*/MINIAOD"`;
-   set `N_STREAMS` in `multicrab_OO_DATA.py`.
-4. **Golden JSON** — already set in the CRAB config:
+2. **Golden JSON** — already set in the CRAB config:
    `Collisions25OO/Cert_Collisions2025OO_394153_394217_golden.json` from the
    DQM certification area (golden = all subsystems, right for the combined
    e+µ analysis; the `_muon` variant is only for a muon-channel-only
    measurement; `silver`/`withVdm` are not for physics). Verify the exact
    filename spelling against the certification page.
-5. **Trigger versions** — check the `HLT_Oxy*` names on an OO file
+3. **Trigger versions** — check the `HLT_Oxy*` names on an OO file
    (`hltInfo <file.root>`); stored names are prefix-matched (`_v`), so only
    additions/renames matter.
-6. **Storage** — `config.Site.storageSite` + `config.Data.outLFNDirBase`
+4. **Storage** — `config.Site.storageSite` + `config.Data.outLFNDirBase`
    (+ your username).
 
 ---
