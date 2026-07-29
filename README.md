@@ -125,6 +125,9 @@ Already confirmed and set in the configs:
 
 - **Data GT** — `150X_dataRun3_Prompt_v1` (from the DAS config of the OO
   PromptReco, done with `CMSSW_15_0_9_patch3`).
+- **Storage** — CERNBox: `T3_CH_CERNBOX`,
+  `outLFNDirBase = /store/user/zheng/OO2025/forest/` → lands in
+  `/eos/user/z/zheng/OO2025/forest/`.
 - **Datasets** — 60 streams, `/IonPhysics{0..59}/OORun2025-PromptReco-v1/MINIAOD`
   (`N_STREAMS = 60` in `multicrab_OO_DATA.py`). PromptReco skims
   `/IonPhysics*/OORun2025-Ion*-PromptReco-v1/USER` also exist — if one is a
@@ -145,8 +148,6 @@ Still to do (marked TODO(OO)/CHANGE_ME in the files):
 3. **Trigger versions** — check the `HLT_Oxy*` names on an OO file
    (`hltInfo <file.root>`); stored names are prefix-matched (`_v`), so only
    additions/renames matter.
-4. **Storage** — `config.Site.storageSite` + `config.Data.outLFNDirBase`
-   (+ your username).
 
 ---
 

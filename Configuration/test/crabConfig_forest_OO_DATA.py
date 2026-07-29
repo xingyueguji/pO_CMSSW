@@ -8,8 +8,8 @@
 # /IonPhysicsN PD. Use multicrab_OO_DATA.py to submit them all in one go;
 # this file alone submits the single PD set in DATASET below.
 #
-# TODO(OO) before submitting — marked CHANGE_ME below:
-#   STORAGE : your T2/T3 storage site and /store/user area
+# Output goes to CERNBox: T3_CH_CERNBOX maps /store/user/zheng/... to
+# /eos/user/z/zheng/... (LFN must be /store/user/<CERN username>/).
 #
 # Input confirmed in DAS: 60 streams, /IonPhysics{0..59}/OORun2025-PromptReco-v1/MINIAOD
 # (PromptReco with CMSSW_15_0_9_patch3, GT 150X_dataRun3_Prompt_v1).
@@ -31,7 +31,7 @@ from CRABClient.UserUtilities import config
 DATASET  = '/IonPhysics0/OORun2025-PromptReco-v1/MINIAOD'
 LUMIMASK = ('https://cms-service-dqmdc.web.cern.ch/CAF/certification/'
             'Collisions25OO/Cert_Collisions2025OO_394153_394217_golden.json')
-STORAGE  = 'CHANGE_ME_T2_XX_Site'
+STORAGE  = 'T3_CH_CERNBOX'
 TAG      = 'HiForestMiniAOD_OO2025_WZ_v1'
 
 config = config()
@@ -52,7 +52,7 @@ config.Data.splitting = 'Automatic'
 config.Data.lumiMask = LUMIMASK
 # Optionally restrict to a run range:
 # config.Data.runRange = 'XXXXXX-YYYYYY'
-config.Data.outLFNDirBase = '/store/user/%s/OO2025/forest/' % 'CHANGE_ME_username'
+config.Data.outLFNDirBase = '/store/user/zheng/OO2025/forest/'
 config.Data.publication = False
 config.Data.outputDatasetTag = TAG
 
