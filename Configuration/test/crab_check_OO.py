@@ -24,6 +24,27 @@ from multiprocessing import Process
 
 from CRABAPI.RawCommand import crabCommand
 
+# likely cause / recommended action per exit code (CMSSW 8xxx, grid 5xxxx/6xxxx)
+KNOWN_CAUSES = {
+    8001: 'CMSSW exception -- inspect stderr (crab getlog) before resubmitting',
+    8002: 'std::exception in cmsRun -- inspect stderr before resubmitting',
+    8004: 'cmsRun killed by signal -- bad node or corrupt read; resubmit is usually fine',
+    8020: 'input file open failed -- transient storage/xrootd; resubmit',
+    8021: 'input file read error -- transient xrootd; resubmit',
+    8028: 'file open failed via AAA fallback -- transient storage; resubmit',
+    8901: 'job terminated unexpectedly (node death/preemption) -- transient; resubmit',
+    50513: 'worker-node environment/scram setup failure -- transient site issue; resubmit',
+    50660: 'memory kill (RSS over request) -- resubmit with --maxmemory raised',
+    50662: 'excessive disk usage on the worker node',
+    50664: 'wall-time limit hit -- resubmit with --maxjobruntime raised',
+    50665: 'killed by the site batch system -- often preemption; resubmit',
+    60302: 'output missing at stageout -- job usually died earlier; check stderr',
+    60303: 'output already exists at destination -- stale earlier transfer; may need cleanup',
+    60307: 'stageout/transfer failed -- check destination quota/permissions; resubmit',
+    60311: 'local stageout failure at the site -- transient; resubmit',
+    60403: 'transfer timeout -- transient; resubmit',
+}
+
 
 def task_dirs(workarea, only):
     for name in sorted(os.listdir(workarea)):
@@ -62,7 +83,12 @@ def report(taskdir):
             code, msg = err[0], str(err[1]).splitlines()[0]
             reasons[(code, msg)] += 1
         for (code, msg), n in reasons.most_common():
+            try:
+                cause = KNOWN_CAUSES.get(int(code), '')
+            except (TypeError, ValueError):
+                cause = ''
             print('    [%s] x%d  %s' % (code, n, msg))
+            print('          -> %s' % (cause or 'unknown cause: crab getlog -d %s --jobids <id>' % taskdir))
     if probe_failed:
         print('  PROBE failures (%s): not resubmittable; if the whole probe '
               'stage failed, submit a fresh task (bump TAG)' % ', '.join(probe_failed))
@@ -74,7 +100,18 @@ def report(taskdir):
 def resubmit(taskdir, options):
     kwargs = {k: v for k, v in options.items() if v}
     print('>>> crab resubmit %s %s' % (taskdir, kwargs or ''))
-    crabCommand('resubmit', dir=taskdir, **kwargs)
+    try:
+        crabCommand('resubmit', dir=taskdir, **kwargs)
+    except Exception as exc:
+        if 'no jobs to resubmit' in str(exc).lower():
+            # Automatic splitting: failed MAIN-stage jobs are recovered by
+            # the tail jobs on their own and are not resubmittable -- this
+            # is fine, nothing is lost. Check again once the task is
+            # COMPLETED; only then are leftover failures actionable.
+            print('    nothing resubmittable: the failures are main-stage jobs')
+            print('    already covered by automatic tail-job recovery -- OK')
+        else:
+            print('    resubmit failed: %s' % exc)
 
 
 def main():
