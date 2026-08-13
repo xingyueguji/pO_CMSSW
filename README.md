@@ -94,10 +94,15 @@ Output: `HiForestMiniAOD.root` (written via `TFileService`).
 - Jet sequence: DATA `akCs4PFJetSequence_pponPbPb_data_cff`, MC `..._mc_cff`.
 - **W/Z pre-selection (DATA only).** A `superFilterPath` is prepended to every path:
   ```
-  clusterCompatibilityFilter * primaryVertexFilter *
+  primaryVertexFilter *
   goodElectrons(pt>=15) * goodMuons(pt>=15 && passed('CutBasedIdLoose')) *
   oneLepton(>=1 good e or µ)
   ```
+  Unlike the pO production, `clusterCompatibilityFilter` is **not** part of
+  the storage gate: its per-event decision is recorded as the
+  `pclusterCompatibilityFilter` branch of `skimanalysis/HltTree` for
+  offline use. (The v2 OO data production of 2026-07 was submitted with
+  the old gated sequence, where the branch is trivially 1.)
   The MC config has **no** such lepton filter (keeps all events).
 - **MET:** no MET collection is stored; PF candidates are kept down to
   `pT = 0`, `|eta| < 5` so PF MET / W mT can be rebuilt offline.

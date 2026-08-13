@@ -183,8 +183,12 @@ process.oneLepton = cms.EDFilter("PATLeptonCountFilter",
     maxNumber = cms.uint32(1000000),
 )
 process.leptonSelection = cms.Sequence(process.goodElectrons * process.goodMuons * process.oneLepton)
+# clusterCompatibilityFilter deliberately NOT in the storage gate (unlike the
+# pO production): its decision is still recorded per stored event as the
+# pclusterCompatibilityFilter branch in skimanalysis/HltTree — apply it
+# offline. NOTE: the v2 OO production (2026-07) was submitted with the old,
+# gated sequence; forests made with this config need a new TAG.
 process.filterSequence = cms.Sequence(
-    process.clusterCompatibilityFilter *
     process.primaryVertexFilter *
     process.leptonSelection
 )
